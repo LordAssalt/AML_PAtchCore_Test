@@ -34,6 +34,9 @@ def run_model(
     average_pixel_rocauc = sum(pixel_resuts) / len(pixel_resuts)
 
     print(image_results)
+    print(average_image_rocauc)
+    print(pixel_resuts)
+    print(average_pixel_rocauc)
 
     # Display global results
 
