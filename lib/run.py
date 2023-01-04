@@ -33,10 +33,10 @@ def run_model(
     pixel_resuts = [v[1] for k, v in results.items()]
     average_pixel_rocauc = sum(pixel_resuts) / len(pixel_resuts)
 
-    print(image_results)
-    print(average_image_rocauc)
-    print(pixel_resuts)
-    print(average_pixel_rocauc)
+    print(f'- Average image-level ROC AUC = {average_image_rocauc:.2f}\n')
+    print(f'- Average pixel-level ROC AUC = {average_pixel_rocauc:.2f}\n')
+
+
 
     # Display global results
 
