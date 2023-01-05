@@ -1,5 +1,5 @@
 from tqdm import tqdm
-
+from PIL import ImageFilter
 import torch
 from torch import tensor
 from torch.utils.data import DataLoader
@@ -117,6 +117,7 @@ class PatchCore(torch.nn.Module):
             pixel_labels.extend(mask.flatten().numpy())
 
             score, segm_map = self.predict(sample)  # Anomaly Detection
+            segm_map.save("segmap.jpg")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
