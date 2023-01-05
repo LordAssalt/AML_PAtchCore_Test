@@ -3,6 +3,7 @@ from PIL import ImageFilter
 import torch
 from torch import tensor
 from torch.utils.data import DataLoader
+from .utils import tensor_to_image
 from torch.nn import functional as F
 
 import numpy as np
@@ -117,7 +118,8 @@ class PatchCore(torch.nn.Module):
             pixel_labels.extend(mask.flatten().numpy())
 
             score, segm_map = self.predict(sample)  # Anomaly Detection
-            segm_map.save("segmap.jpg")
+            img = tensor_to_image(segm_map)
+            img.save("oyt.png")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
