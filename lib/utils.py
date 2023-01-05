@@ -3,7 +3,7 @@ import PIL
 import torch
 from torch import tensor
 from torchvision import transforms
-
+import numpy as np
 from PIL import ImageFilter
 from sklearn import random_projection
 
