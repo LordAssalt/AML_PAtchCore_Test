@@ -1,6 +1,7 @@
 from tqdm import tqdm
 from PIL import ImageFilter
 import torch
+import torchvision.transforms as T
 from torch import tensor
 from torch.utils.data import DataLoader
 from .utils import tensor_to_image
@@ -113,7 +114,7 @@ class PatchCore(torch.nn.Module):
         pixel_preds = []
         pixel_labels = []
 
-        transform = torch.ToPILImage()
+        transform = T.ToPILImage()
 
         for sample, mask, label in tqdm(test_dataloader):
             image_labels.append(label)
