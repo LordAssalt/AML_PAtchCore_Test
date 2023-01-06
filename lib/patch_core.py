@@ -113,13 +113,16 @@ class PatchCore(torch.nn.Module):
         pixel_preds = []
         pixel_labels = []
 
+        transform = torch.ToPILImage()
+
         for sample, mask, label in tqdm(test_dataloader):
             image_labels.append(label)
             pixel_labels.extend(mask.flatten().numpy())
 
             score, segm_map = self.predict(sample)  # Anomaly Detection
-            img = tensor_to_image(segm_map)
-            img.save("oyt.png")
+            print(segm_map)
+            img = transform(segm_map)
+            img.save("out.png")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
