@@ -135,7 +135,7 @@ class PatchCore(torch.nn.Module):
             img.save(f"{number}segmap_out.png")
 
             img = transform(torch.squeeze(sample))
-            sample.save(f"{number}sample.png")
+            img.save(f"{number}sample.png")
 
             img = transform(torch.squeeze(mask))
             img.save("mask.png")
