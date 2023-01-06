@@ -6,6 +6,7 @@ from torch import tensor
 from torch.utils.data import DataLoader
 from .utils import tensor_to_image
 from torch.nn import functional as F
+import random
 
 import numpy as np
 from sklearn.metrics import roc_auc_score
@@ -123,22 +124,23 @@ class PatchCore(torch.nn.Module):
             print(f"label: {label}")
             print(f"sample: {sample}")
             print(f"mask: {mask}")
+            number = str(random.randint(0, 100))
 
 
 
             score, segm_map = self.predict(sample)  # Anomaly Detection
-            print(f"label: {label[1]}")
+            print(f"label: {label}")
 
             img = transform(segm_map)
-            img.save("segmap_out.png")
+            img.save(f"{number}segmap_out.png")
 
             #img = transform(sample)
-            #img.save("sample.png")
+            sample.save(f"{number}sample.png")
 
             #img = transform(mask)
             #img.save("mask.png")
 
-            print("fine")
+            print("---fine---")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
