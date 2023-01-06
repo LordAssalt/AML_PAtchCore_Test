@@ -120,10 +120,25 @@ class PatchCore(torch.nn.Module):
             image_labels.append(label)
             pixel_labels.extend(mask.flatten().numpy())
 
+            print(f"label: {label}")
+            print(f"sample: {sample}")
+            print(f"mask: {mask}")
+
+
+
             score, segm_map = self.predict(sample)  # Anomaly Detection
-            print(segm_map)
+
+
             img = transform(segm_map)
-            img.save("out.png")
+            img.save("segmap_out.png")
+
+            img = transform(sample)
+            img.save("sample.png")
+
+            img = transform(mask)
+            img.save("mask.png")
+
+            print("fine")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
