@@ -125,7 +125,7 @@ class PatchCore(torch.nn.Module):
             print(f"sample: {sample.size()}")
             print(f"mask: {mask.size()}")
 
-            print(f"sample squueze: {torch.squeeze(sample).size()}")
+            print(f"sample squueze: {torch.squeeze(sample).transpose(0, 2).size()}")
             number = str(random.randint(0, 100))
 
 
@@ -134,13 +134,13 @@ class PatchCore(torch.nn.Module):
             print(f"segmap: {segm_map}")
 
             img = transform(segm_map)
-            img.save(f"{number}segmap_out.png")
+            img.save(f"{number}segmap_out.jpg")
 
             img = transform(torch.squeeze(sample))
-            img.save(f"{number}sample.png")
+            img.save(f"{number}sample.jpg")
 
             img = transform(torch.squeeze(mask))
-            img.save(f"{number}mask.png")
+            img.save(f"{number}mask.jpg")
 
             print("---fine---")
 
