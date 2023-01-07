@@ -124,6 +124,8 @@ class PatchCore(torch.nn.Module):
             print(f"label: {label.size()}")
             print(f"sample: {sample.size()}")
             print(f"mask: {mask.size()}")
+
+            print(f"sample squueze: {torch.squeeze(sample).size()}")
             number = str(random.randint(0, 100))
 
 
