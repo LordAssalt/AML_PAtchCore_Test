@@ -122,8 +122,8 @@ class PatchCore(torch.nn.Module):
             pixel_labels.extend(mask.flatten().numpy())
 
             print(f"label: {label.size()}")
-            print(f"sample: {sample.sieze()}")
-            print(f"mask: {mask.size(å)}")
+            print(f"sample: {sample.size()}")
+            print(f"mask: {mask.size()}")
             number = str(random.randint(0, 100))
 
 
