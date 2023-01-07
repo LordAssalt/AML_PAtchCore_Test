@@ -121,9 +121,9 @@ class PatchCore(torch.nn.Module):
             image_labels.append(label)
             pixel_labels.extend(mask.flatten().numpy())
 
-            print(f"label: {label}")
-            print(f"sample: {sample}")
-            print(f"mask: {mask}")
+            print(f"label: {label.size()}")
+            print(f"sample: {sample.sieze()}")
+            print(f"mask: {mask.size(å)}")
             number = str(random.randint(0, 100))
 
 
@@ -138,7 +138,7 @@ class PatchCore(torch.nn.Module):
             img.save(f"{number}sample.png")
 
             img = transform(torch.squeeze(mask))
-            img.save("mask.png")
+            img.save(f"{number}mask.png")
 
             print("---fine---")
 
