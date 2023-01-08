@@ -42,8 +42,8 @@ class PatchCore(torch.nn.Module):
         self.model.eval()
 
         # Register hooks
-        self.model.encode_image.layer2[-1].register_forward_hook(hook)
-        self.model.encode_image.layer3[-1].register_forward_hook(hook)
+        self.model.layer2[-1].register_forward_hook(hook)
+        self.model.layer3[-1].register_forward_hook(hook)
 
         # Parameters
         self.memory_bank = []
