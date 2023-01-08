@@ -39,12 +39,11 @@ class PatchCore(torch.nn.Module):
         for param in self.model.parameters(): 
             param.requires_grad = False
 
-
         self.model.eval()
 
         # Register hooks
-        self.model.layer2[-1].register_forward_hook(hook)
-        self.model.layer3[-1].register_forward_hook(hook)
+        self.model.encode_image.layer2[-1].register_forward_hook(hook)
+        self.model.encode_image.layer3[-1].register_forward_hook(hook)
 
         # Parameters
         self.memory_bank = []
@@ -65,7 +64,7 @@ class PatchCore(torch.nn.Module):
                 self.feature filled with extracted feature maps
         """
         self.features = []
-        _ = self.model(sample)
+        _ = self.model.encode_image(sample)
         return self.features
 
 
