@@ -123,12 +123,10 @@ class PatchCore(torch.nn.Module):
             image_labels.append(label)
             pixel_labels.extend(mask.flatten().numpy())
 
-            print(f"label: {label.size()}")
+            #print(f"label: {label.size()}")
             print(f"sample: {sample.size()}")
             print(f"mask: {mask.size()}")
 
-            print(f"sample squueze: {torch.squeeze(sample).transpose(0, 2).size()}")
-            print(f"sample squueze and view: {torch.squeeze(sample).view(224,224,3).size()}")
             number = str(random.randint(0, 100))
 
 
@@ -139,7 +137,7 @@ class PatchCore(torch.nn.Module):
             img = transform(segm_map)
             img.save(f"{number}segmap_out.jpg")
 
-            img = transform(torch.squeeze(sample).view(224,224,3))
+            img = transform(torch.squeeze(sample))
             img.save(f"{number}sample.jpg")
 
             img = transform(torch.squeeze(mask))
