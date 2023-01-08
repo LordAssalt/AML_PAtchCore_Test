@@ -1,18 +1,14 @@
 from tqdm import tqdm
-from PIL import ImageFilter
 import torch
 import torchvision.transforms as T
 from torch import tensor
 from torch.utils.data import DataLoader
-from .utils import tensor_to_image
-from torch.nn import functional as F
 import random
-
 import numpy as np
 from sklearn.metrics import roc_auc_score
-
 from .utils import gaussian_blur, get_coreset
-
+import clip  #needed for CLIP
+from PIL import Image  #needed for CLIP
 
 class PatchCore(torch.nn.Module):
     def __init__(
@@ -33,11 +29,17 @@ class PatchCore(torch.nn.Module):
             self.features.append(output)
 
         # Setup backbone net
-        self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)   
-        
+        #self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
+
+        # Setup bacbone CLIP
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.model,self.preprocess = clip.load("ViT-B/32", device=device)
+
         # Disable gradient computation
         for param in self.model.parameters(): 
             param.requires_grad = False
+
+
         self.model.eval()
 
         # Register hooks
