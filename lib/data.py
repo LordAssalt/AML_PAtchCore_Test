@@ -48,12 +48,10 @@ class MVTecDataset:
     def __init__(self, cls: str, size: int = DEFAULT_SIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
         self.cls = cls
         self.size = size
-        self.vanilla=vanilla
-        self.backbone=backbone
         if cls in mvtec_classes():
             self.check_and_download_cls()
-        self.train_ds = MVTecTrainDataset(cls, size)
-        self.test_ds = MVTecTestDataset(cls, size)
+        self.train_ds = MVTecTrainDataset(cls, size, vanilla, backbone)
+        self.test_ds = MVTecTestDataset(cls, size,  vanilla, backbone)
 
     def check_and_download_cls(self):
         if not isdir(DATASETS_PATH / self.cls):
@@ -75,7 +73,7 @@ class MVTecDataset:
 
 
 class MVTecTrainDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE):
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
         super().__init__(
             root=DATASETS_PATH / cls / "train",
             transform=transforms.Compose([    # Transform img composing several actions
@@ -85,14 +83,14 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         )
-        if not self.vanilla:  # Cosi?? Boh
-            _, self.transform = clip.load(self.backbone)
+        if not vanilla:  # Cosi?? Boh
+            _, self.transform = clip.load(backbone)
         self.cls = cls
         self.size = size
 
 
 class MVTecTestDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE):
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
         super().__init__(
             root=DATASETS_PATH / cls / "test",
             transform=transforms.Compose([    # Transform img composing several actions
@@ -107,8 +105,8 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),             # Transform the mask into a tensor
             ]),
         )
-        if not self.vanilla:  # Cosi?? Boh
-            _, self.transform = clip.load(self.backbone)
+        if not vanilla:  # Cosi?? Boh
+            _, self.transform = clip.load(backbone)
 
         self.cls = cls
         self.size = size
