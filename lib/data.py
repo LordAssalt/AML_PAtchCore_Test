@@ -40,7 +40,7 @@ class_links = {
 
 
 def mvtec_classes():
-    return [ "bottle",]# "cable", "capsule", "carpet", "grid", "hazelnut", "leather", "metal_nut", "pill", "screw", "tile",
+    return [ "bottle"]#, "cable", "capsule", "carpet", "grid", "hazelnut", "leather", "metal_nut", "pill", "screw", "tile",
         #"toothbrush", "transistor", "wood", "zipper"]
 
 
