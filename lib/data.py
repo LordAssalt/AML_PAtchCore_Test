@@ -50,8 +50,8 @@ class MVTecDataset:
         self.size = size
         if cls in mvtec_classes():
             self.check_and_download_cls()
-        self.train_ds = MVTecTrainDataset(cls, size)#, vanilla, backbone)
-        self.test_ds = MVTecTestDataset(cls, size)#,  vanilla, backbone)
+        self.train_ds = MVTecTrainDataset(cls, size, vanilla, backbone)
+        self.test_ds = MVTecTestDataset(cls, size,  vanilla, backbone)
 
     def check_and_download_cls(self):
         if not isdir(DATASETS_PATH / self.cls):
@@ -73,7 +73,7 @@ class MVTecDataset:
 
 
 class MVTecTrainDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE):
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
         super().__init__(
             root=DATASETS_PATH / cls / "train",
             transform=transforms.Compose([    # Transform img composing several actions
@@ -88,7 +88,7 @@ class MVTecTrainDataset(ImageFolder):
 
 
 class MVTecTestDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE):
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
         super().__init__(
             root=DATASETS_PATH / cls / "test",
             transform=transforms.Compose([    # Transform img composing several actions
