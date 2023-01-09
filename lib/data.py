@@ -73,7 +73,7 @@ class MVTecDataset:
 
 
 class MVTecTrainDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE):
         super().__init__(
             root=DATASETS_PATH / cls / "train",
             transform=transforms.Compose([    # Transform img composing several actions
@@ -83,14 +83,12 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         )
-        #if not vanilla:  # Cosi?? Boh
-        #    _, self.transform = clip.load(backbone)
         self.cls = cls
         self.size = size
 
 
 class MVTecTestDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE):
         super().__init__(
             root=DATASETS_PATH / cls / "test",
             transform=transforms.Compose([    # Transform img composing several actions
@@ -105,9 +103,6 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),             # Transform the mask into a tensor
             ]),
         )
-        #if not vanilla:  # Cosi?? Boh
-        #    _, self.transform = clip.load(backbone)
-
         self.cls = cls
         self.size = size
 
