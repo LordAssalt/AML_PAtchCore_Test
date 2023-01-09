@@ -1,13 +1,13 @@
-from tqdm import tqdm
 import torch
+import random
+import clip  #needed for CLIP
+import numpy as np
 import torchvision.transforms as T
+from tqdm import tqdm
 from torch import tensor
 from torch.utils.data import DataLoader
-import random
-import numpy as np
 from sklearn.metrics import roc_auc_score
 from .utils import gaussian_blur, get_coreset
-import clip  #needed for CLIP
 from PIL import Image  #needed for CLIP
 
 class PatchCore(torch.nn.Module):
@@ -16,6 +16,8 @@ class PatchCore(torch.nn.Module):
             f_coreset: float = 0.01,   # Fraction rate of training samples
             eps_coreset: float = 0.90, # SparseProjector parameter
             k_nearest: int = 3,        # k parameter for K-NN search
+            vanilla: bool = True,
+            backbone: str = 'wide_resnet50_2',
     ):
         assert f_coreset > 0
         assert eps_coreset > 0
@@ -29,28 +31,37 @@ class PatchCore(torch.nn.Module):
             self.features.append(output)
 
         # Setup backbone net
-        #self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
-
-        # Setup bacbone CLIP
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model,self.preprocess = clip.load("ViT-B/32", device=device)
+        if vanilla==True:
+            self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
+            self.model.eval()
+        else:
+            self.model, _ = clip.load(backbone)
+            self.model.cuda().eval()
 
         # Disable gradient computation
         for param in self.model.parameters(): 
             param.requires_grad = False
 
-        self.model.eval()
 
         # Register hooks
-        self.model.layer2[-1].register_forward_hook(hook)
-        self.model.layer3[-1].register_forward_hook(hook)
+        if vanilla:
+            self.model.layer2[-1].register_forward_hook(hook)
+            self.model.layer3[-1].register_forward_hook(hook)
+        else:
+            if "ViT" in backbone:
+                NotImplementedError()
+                # Non ci sono layer
+            else:
+                self.model.visual.layer2[-1].register_forward_hook(hook)
+                self.model.visual.layer3[-1].register_forward_hook(hook)
 
         # Parameters
         self.memory_bank = []
         self.f_coreset = f_coreset
         self.eps_coreset = eps_coreset
         self.k_nearest = k_nearest
-        
+        self.vanilla = vanilla
+        self.backbone = backbone
         self.image_size = 224
 
 
@@ -64,7 +75,11 @@ class PatchCore(torch.nn.Module):
                 self.feature filled with extracted feature maps
         """
         self.features = []
-        _ = self.model.encode_image(sample)
+        if self.vanilla:
+            _ = self.model(sample)
+        else:
+            _ = self.model.encode_image(sample)  #Clip
+
         return self.features
 
 
@@ -123,26 +138,23 @@ class PatchCore(torch.nn.Module):
             pixel_labels.extend(mask.flatten().numpy())
 
             #print(f"label: {label.size()}")
-            print(f"sample: {sample.size()}")
-            print(f"mask: {mask.size()}")
-
-            number = str(random.randint(0, 100))
-
-
+            #print(f"sample: {sample.size()}")
+            #print(f"mask: {mask.size()}")
+            #number = str(random.randint(0, 100))
 
             score, segm_map = self.predict(sample)  # Anomaly Detection
-            print(f"segmap: {segm_map}")
+            #print(f"segmap: {segm_map}")
 
-            img = transform(segm_map)
-            img.save(f"{number}segmap_out.jpg")
+            #img = transform(segm_map)
+            #img.save(f"{number}segmap_out.jpg")
 
-            img = transform(torch.squeeze(sample))
-            img.save(f"{number}sample.jpg")
+            #img = transform(torch.squeeze(sample))
+            #img.save(f"{number}sample.jpg")
 
-            img = transform(torch.squeeze(mask))
-            img.save(f"{number}mask.jpg")
+            #img = transform(torch.squeeze(mask))
+            #img.save(f"{number}mask.jpg")
 
-            print("---fine---")
+            #print("---fine---")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())

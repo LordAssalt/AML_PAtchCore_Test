@@ -1,5 +1,6 @@
 from .data import MVTecDataset, mvtec_classes
 from .patch_core import PatchCore
+from .utils import backnones
 
 ALL_CLASSES = mvtec_classes()
 
@@ -7,13 +8,14 @@ ALL_CLASSES = mvtec_classes()
 def run_model(
     classes: list = ALL_CLASSES, 
     f_coreset: float = 0.1,
-):
+    vanilla: bool = True,
+    backbone: str = 'WideResNet50'):
     results = {}  # key = class, Value = [image-level ROC AUC, pixel-level ROC AUC]
 
     print(f'Running PatchCore...')
     for cls in classes:
         train_dl, test_dl = MVTecDataset(cls).get_dataloaders()
-        patch_core = PatchCore(f_coreset)  # <--- UN PATCHCORE PER OGNI CLASSE???????????????????????????????
+        patch_core = PatchCore(f_coreset, vanilla=vanilla, backbone=backnones[backbone])
 
         print(f'\nClass {cls}:')
         print(f'Training...')
@@ -46,4 +48,4 @@ def run_model(
 
 
 if __name__ == "__main__":
-    run_model()
+    run_model(vanilla=True, backbone='WideResNet50')

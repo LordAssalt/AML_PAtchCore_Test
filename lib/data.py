@@ -1,6 +1,6 @@
 import os
 from os.path import isdir
-
+import clip
 import tarfile
 import wget
 import ssl
@@ -40,15 +40,16 @@ class_links = {
 
 
 def mvtec_classes():
-    return [
-        "bottle", "cable"]#, "capsule", "carpet", "grid", "hazelnut", "leather", "metal_nut", "pill", "screw", "tile",
+    return [ "bottle",]# "cable", "capsule", "carpet", "grid", "hazelnut", "leather", "metal_nut", "pill", "screw", "tile",
         #"toothbrush", "transistor", "wood", "zipper"]
 
 
 class MVTecDataset:
-    def __init__(self, cls: str, size: int = DEFAULT_SIZE):
+    def __init__(self, cls: str, size: int = DEFAULT_SIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
         self.cls = cls
         self.size = size
+        self.vanilla=vanilla
+        self.backbone=backbone
         if cls in mvtec_classes():
             self.check_and_download_cls()
         self.train_ds = MVTecTrainDataset(cls, size)
@@ -84,6 +85,8 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         )
+        if not self.vanilla:  # Cosi?? Boh
+            _, self.transform = clip.load(self.backbone)
         self.cls = cls
         self.size = size
 
@@ -104,6 +107,9 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),             # Transform the mask into a tensor
             ]),
         )
+        if not self.vanilla:  # Cosi?? Boh
+            _, self.transform = clip.load(self.backbone)
+
         self.cls = cls
         self.size = size
 

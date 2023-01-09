@@ -7,6 +7,11 @@ import numpy as np
 from PIL import ImageFilter
 from sklearn import random_projection
 
+backnones = {
+    'WideResNet50':'wide_resnet50_2',
+    'ResNet50':'RN50',
+    'Vit32':'ViT-B/32'
+}
 
 def get_coreset(
         memory_bank: tensor,
@@ -83,3 +88,5 @@ def tensor_to_image(tensor):
         assert tensor.shape[0] == 1
         tensor = tensor[0]
     return PIL.Image.fromarray(tensor)
+
+
