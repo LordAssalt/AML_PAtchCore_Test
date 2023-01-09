@@ -31,6 +31,8 @@ class PatchCore(torch.nn.Module):
             self.features.append(output)
 
         # Setup backbone net
+        print(f"Vanilla Mode: {vanilla}")
+        print(f"Net Used: {backbone}")
         if vanilla==True:
             self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
             self.model.eval()
