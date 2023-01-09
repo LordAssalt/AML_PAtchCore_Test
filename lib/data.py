@@ -83,8 +83,8 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         )
-        if not vanilla:  # Cosi?? Boh
-            _, self.transform = clip.load(backbone)
+        #if not vanilla:  # Cosi?? Boh
+        #    _, self.transform = clip.load(backbone)
         self.cls = cls
         self.size = size
 
@@ -105,8 +105,8 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),             # Transform the mask into a tensor
             ]),
         )
-        if not vanilla:  # Cosi?? Boh
-            _, self.transform = clip.load(backbone)
+        #if not vanilla:  # Cosi?? Boh
+        #    _, self.transform = clip.load(backbone)
 
         self.cls = cls
         self.size = size
