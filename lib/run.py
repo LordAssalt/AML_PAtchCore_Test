@@ -1,4 +1,4 @@
-from .data import MVTecDataset, mvtec_classes
+from .data import MVTecDataset, mvtec_classes, DEFAULT_RESIZE
 from .patch_core import PatchCore
 from .utils import backnones
 
@@ -10,11 +10,18 @@ def run_model(
     f_coreset: float = 0.1,
     vanilla: bool = True,
     backbone: str = 'WideResNet50'):
+
     results = {}  # key = class, Value = [image-level ROC AUC, pixel-level ROC AUC]
+    if vanilla:
+        size = DEFAULT_RESIZE
+    elif backbone == 'ResNet50':  # NON RICORDO IL NOME GIUSTO
+        size = 448
+    else:  # ViTB...
+        size = 224
 
     print(f'Running PatchCore...')
     for cls in classes:
-        train_dl, test_dl = MVTecDataset(cls).get_dataloaders()
+        train_dl, test_dl = MVTecDataset(cls, size=size).get_dataloaders()
         patch_core = PatchCore(f_coreset, vanilla=vanilla, backbone=backnones[backbone])
 
         print(f'\nClass {cls}:')

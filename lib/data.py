@@ -72,48 +72,81 @@ class MVTecDataset:
         return DataLoader(self.train_ds), DataLoader(self.test_ds)
 
 
+def _convert_image_to_rgb(image):
+    return image.convert("RGB")
+
+
 class MVTecTrainDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
-        super().__init__(
-            root=DATASETS_PATH / cls / "train",
-            transform=transforms.Compose([    # Transform img composing several actions
-                transforms.Resize(resize),    # Resize the image to the default value of 256 if not changed
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True,
+                 backbone: str = 'wide_resnet50_2'):
+        if vanilla:
+            transform = transforms.Compose([  # Transform img composing several actions
+                transforms.Resize(resize),  # Resize the image to the default value of 256 if not changed
                 transforms.CenterCrop(size),  # Center the image
-                transforms.ToTensor(),        # Transform the image into a tensor
+                transforms.ToTensor(),  # Transform the image into a tensor
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
-        )
-        if not vanilla:
-            _, self.transform = clip.load(backbone)
-        self.cls = cls
-        self.size = size
-        print(f"Vanilla Mode in DataTrain.py: {vanilla}")
-        print(f"Net Used in DataTrain.py: {backbone}")
+        else:
+            transform = transform = transforms.Compose([
+                transforms.Resize(resize, interpolation=transforms.InterpolationMode.BICUBIC),
+                transforms.CenterCrop(resize),
+                _convert_image_to_rgb,
+                transforms.ToTensor(),
+                transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
 
+                super().__init__(
+                    root=DATASETS_PATH / cls / "train",
+                    transform=transform
+                )
+
+                self.cls = cls
+            self.size = size
+            print(f"Vanilla Mode in DataTrain.py: {vanilla}")
+            print(f"Net Used in DataTrain.py: {backbone}")
 
 
 class MVTecTestDataset(ImageFolder):
-    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True, backbone: str = 'wide_resnet50_2'):
-        super().__init__(
-            root=DATASETS_PATH / cls / "test",
-            transform=transforms.Compose([    # Transform img composing several actions
-                transforms.Resize(resize, interpolation=transforms.InterpolationMode.BICUBIC), # Resize the image to the default value of 256 if not changed
+    def __init__(self, cls: str, size: int, resize: int = DEFAULT_RESIZE, vanilla: bool = True,
+                 backbone: str = 'wide_resnet50_2'):
+        if vanilla:
+            transform = transforms.Compose([  # Transform img composing several actions
+                transforms.Resize(resize, interpolation=transforms.InterpolationMode.BICUBIC),
+                # Resize the image to the default value of 256 if not changed
                 transforms.CenterCrop(size),  # Center the image
-                transforms.ToTensor(),        # Transform the image into a tensor
+                transforms.ToTensor(),  # Transform the image into a tensor
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
-            ]),
-            target_transform=transforms.Compose([  # Transform mask composing several actions
-                transforms.Resize(resize, interpolation=transforms.InterpolationMode.NEAREST), # Resize the mask to the default value of 256 if not changed
-                transforms.CenterCrop(size),       # Center the mask
-                transforms.ToTensor(),             # Transform the mask into a tensor
-            ]),
-        )
-        if not vanilla:
-            _, self.transform = clip.load(backbone)
-        self.cls = cls
-        self.size = size
-        print(f"Vanilla Mode in DataTest.py: {vanilla}")
-        print(f"Net Used in DataTest.py: {backbone}")
+            ])
+            target_transform = transforms.Compose([  # Transform mask composing several actions
+                transforms.Resize(resize, interpolation=transforms.InterpolationMode.NEAREST),
+                # Resize the mask to the default value of 256 if not changed
+                transforms.CenterCrop(size),  # Center the mask
+                transforms.ToTensor(),  # Transform the mask into a tensor
+            ])
+        else:
+            transform = transform = transforms.Compose([
+                transforms.Resize(resize, interpolation=transforms.InterpolationMode.BICUBIC),
+                transforms.CenterCrop(resize),
+                _convert_image_to_rgb,
+                transforms.ToTensor(),
+                transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
+
+                target_transform = transforms.Compose([
+                transforms.Resize(resize, interpolation=transforms.InterpolationMode.NEAREST),
+                transforms.CenterCrop(resize),
+                _convert_image_to_rgb,  # MAGARI ESISTE UNA FUNZIONE COME QUESTA IN TRANSFORMS
+                transforms.ToTensor(),
+            ])
+
+            super().__init__(
+                root=DATASETS_PATH / cls / "test",
+                transform=transform
+            target_transform = target_transform
+            )
+
+            self.cls = cls
+            self.size = size
+            print(f"Vanilla Mode in DataTest.py: {vanilla}")
+            print(f"Net Used in DataTest.py: {backbone}")
 
     def __getitem__(self, index):
         path, _ = self.samples[index]
