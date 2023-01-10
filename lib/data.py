@@ -84,8 +84,8 @@ class MVTecTrainDataset(ImageFolder):
             ])
         )
 
-        if not vanilla:
-            _,self.transforms = clip.load(backbone)
+        #if not vanilla:
+           # _,self.transforms = clip.load(backbone)
 
         self.cls = cls
         self.size = size
@@ -108,8 +108,8 @@ class MVTecTestDataset(ImageFolder):
             ]),
         )
 
-        if not vanilla:
-            _,self.transforms = clip.load(backbone)
+        #if not vanilla:
+        #    _,self.transforms = clip.load(backbone)
 
         self.cls = cls
         self.size = size
