@@ -83,9 +83,11 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         )
-
         self.cls = cls
         self.size = size
+        print(f"Vanilla Mode in DataTrain.py: {vanilla}")
+        print(f"Net Used in DataTrain.py: {backbone}")
+
 
 
 class MVTecTestDataset(ImageFolder):
@@ -104,9 +106,10 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),             # Transform the mask into a tensor
             ]),
         )
-
         self.cls = cls
         self.size = size
+        print(f"Vanilla Mode in DataTest.py: {vanilla}")
+        print(f"Net Used in DataTest.py: {backbone}")
 
     def __getitem__(self, index):
         path, _ = self.samples[index]
