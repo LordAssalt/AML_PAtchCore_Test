@@ -1,4 +1,4 @@
-from .data import MVTecDataset, mvtec_classes, DEFAULT_RESIZE
+from .data import MVTecDataset, mvtec_classes, DEFAULT_SIZE
 from .patch_core import PatchCore
 from .utils import backnones
 
@@ -13,7 +13,7 @@ def run_model(
 
     results = {}  # key = class, Value = [image-level ROC AUC, pixel-level ROC AUC]
     if vanilla:
-        size = DEFAULT_RESIZE
+        size = DEFAULT_SIZE
     elif backbone == 'ResNet50':  # NON RICORDO IL NOME GIUSTO
         size = 448
     else:  # ViTB...

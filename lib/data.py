@@ -50,8 +50,8 @@ class MVTecDataset:
         self.size = size
         if cls in mvtec_classes():
             self.check_and_download_cls()
-        self.train_ds = MVTecTrainDataset(cls, size, vanilla=vanilla, backbone=backbone)
-        self.test_ds = MVTecTestDataset(cls, size,  vanilla=vanilla, backbone=backbone)
+        self.train_ds = MVTecTrainDataset(cls, size=size, vanilla=vanilla, backbone=backbone)
+        self.test_ds = MVTecTestDataset(cls, size=size,  vanilla=vanilla, backbone=backbone)
 
     def check_and_download_cls(self):
         if not isdir(DATASETS_PATH / self.cls):
@@ -92,7 +92,7 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.CenterCrop(resize),
                 _convert_image_to_rgb,
                 transforms.ToTensor(),
-                transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))])
+                transforms.Normalize((0.481, 0.457, 0.408), (0.268, 0.261, 0.275))])
 
         super().__init__(
                 root=DATASETS_PATH / cls / "train",
