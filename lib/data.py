@@ -50,8 +50,8 @@ class MVTecDataset:
         self.size = size
         if cls in mvtec_classes():
             self.check_and_download_cls()
-        self.train_ds = MVTecTrainDataset(cls, size, vanilla, backbone)
-        self.test_ds = MVTecTestDataset(cls, size,  vanilla, backbone)
+        self.train_ds = MVTecTrainDataset(cls, size, vanilla=vanilla, backbone=backbone)
+        self.test_ds = MVTecTestDataset(cls, size,  vanilla=vanilla, backbone=backbone)
 
     def check_and_download_cls(self):
         if not isdir(DATASETS_PATH / self.cls):
@@ -83,6 +83,8 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         )
+        if not vanilla:
+            _, self.transform = clip.load(backbone)
         self.cls = cls
         self.size = size
         print(f"Vanilla Mode in DataTrain.py: {vanilla}")
@@ -106,6 +108,8 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),             # Transform the mask into a tensor
             ]),
         )
+        if not vanilla:
+            _, self.transform = clip.load(backbone)
         self.cls = cls
         self.size = size
         print(f"Vanilla Mode in DataTest.py: {vanilla}")
