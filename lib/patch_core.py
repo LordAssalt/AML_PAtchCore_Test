@@ -37,8 +37,8 @@ class PatchCore(torch.nn.Module):
             self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
             self.model.eval()
         else:
-            self.model, _ = clip.load(backbone)
-            self.model.cuda().eval()
+            self.model, _ = clip.load(backbone, device="cpu")
+            self.model.eval()
 
         # Disable gradient computation
         for param in self.model.parameters(): 
@@ -139,24 +139,7 @@ class PatchCore(torch.nn.Module):
             image_labels.append(label)
             pixel_labels.extend(mask.flatten().numpy())
 
-            #print(f"label: {label.size()}")
-            #print(f"sample: {sample.size()}")
-            #print(f"mask: {mask.size()}")
-            #number = str(random.randint(0, 100))
-
             score, segm_map = self.predict(sample)  # Anomaly Detection
-            #print(f"segmap: {segm_map}")
-
-            #img = transform(segm_map)
-            #img.save(f"{number}segmap_out.jpg")
-
-            #img = transform(torch.squeeze(sample))
-            #img.save(f"{number}sample.jpg")
-
-            #img = transform(torch.squeeze(mask))
-            #img.save(f"{number}mask.jpg")
-
-            #print("---fine---")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
