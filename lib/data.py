@@ -84,9 +84,6 @@ class MVTecTrainDataset(ImageFolder):
             ])
         )
 
-        #if not vanilla:
-           # _,self.transforms = clip.load(backbone)
-
         self.cls = cls
         self.size = size
 
@@ -107,9 +104,6 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),             # Transform the mask into a tensor
             ]),
         )
-
-        #if not vanilla:
-        #    _,self.transforms = clip.load(backbone)
 
         self.cls = cls
         self.size = size
