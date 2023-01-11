@@ -34,7 +34,7 @@ class PatchCore(torch.nn.Module):
         print(f"Vanilla Mode: {vanilla}")
         print(f"Net Used: {backbone}")
 
-        if vanilla==True:
+        if vanilla:
             self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
             self.model.layer2[-1].register_forward_hook(hook)  # Register hooks
             self.model.layer3[-1].register_forward_hook(hook)  # Register hooks
@@ -51,7 +51,6 @@ class PatchCore(torch.nn.Module):
         # Disable gradient computation
         for param in self.model.parameters(): 
             param.requires_grad = False
-
 
         # Parameters
         self.memory_bank = []
@@ -72,7 +71,6 @@ class PatchCore(torch.nn.Module):
             Return:
                 self.feature filled with extracted feature maps
         """
-
         self.features = []
         if self.vanilla:
             _ = self.model(sample)
@@ -89,11 +87,8 @@ class PatchCore(torch.nn.Module):
             Creates memory bank from train dataset and apply greedy coreset subsampling.
         """
         for sample, _ in tqdm(train_dataloader):
-            if self.vanilla:
-                feature_maps = self(sample)  # Extract feature maps
-            else:
-                self.features = []
-                feature_maps = self.model.encode_image(sample)
+
+            feature_maps = self(sample)  # Extract feature maps
 
             # Create aggregation function of feature vectors in the neighbourhood
             self.avg = torch.nn.AvgPool2d(3, stride=1)
