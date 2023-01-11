@@ -87,7 +87,7 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         else:
-            _,transform = clip.load(backbone)
+            _,transform = clip.load("RN50")
 
         super().__init__(
                 root=DATASETS_PATH / cls / "train",
