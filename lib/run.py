@@ -11,10 +11,11 @@ def run_model(
     vanilla: bool = True,
     backbone: str = 'WideResNet50'):
 
+    if backbone == "WideResNet50" & vanilla != True:
+        raise Exception('There has been an error in the system')
+
     results = {}  # key = class, Value = [image-level ROC AUC, pixel-level ROC AUC]
     if vanilla:
-        if backbone !="WideResNet50":
-            raise Exception('There has been an error in the system')
         size = DEFAULT_SIZE
     elif backbone == 'ResNet50':  # NON RICORDO IL NOME GIUSTO
         size = 448
