@@ -9,7 +9,7 @@ from sklearn import random_projection
 
 backnones = {
     'WideResNet50':'wide_resnet50_2',
-    'ResNet50':'RN50',
+    'ResNet50':'RN50x64',
     'Vit32':'ViT-B/32'
 }
 

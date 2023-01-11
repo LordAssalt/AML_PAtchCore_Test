@@ -17,9 +17,9 @@ def run_model(
     results = {}  # key = class, Value = [image-level ROC AUC, pixel-level ROC AUC]
     if vanilla:
         size = DEFAULT_SIZE
-    elif backbone == 'ResNet50':  # NON RICORDO IL NOME GIUSTO
+    elif backbone == 'ResNet50':  # RN50x64
         size = 448
-    else:  # ViTB...
+    else:  # ViT-B/32
         size = 224
 
     print(f'Running PatchCore...')
