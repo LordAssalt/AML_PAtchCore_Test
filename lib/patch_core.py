@@ -89,7 +89,11 @@ class PatchCore(torch.nn.Module):
             Creates memory bank from train dataset and apply greedy coreset subsampling.
         """
         for sample, _ in tqdm(train_dataloader):
-            feature_maps = self(sample)  # Extract feature maps
+            if self.vanilla:
+                feature_maps = self(sample)  # Extract feature maps
+            else:
+                self.features = []
+                feature_maps = self.model.encode_image(sample)
 
             # Create aggregation function of feature vectors in the neighbourhood
             self.avg = torch.nn.AvgPool2d(3, stride=1)
