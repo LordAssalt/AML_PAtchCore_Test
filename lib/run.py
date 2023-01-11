@@ -11,8 +11,8 @@ def run_model(
     vanilla: bool = True,
     backbone: str = 'WideResNet50'):
 
-    if backbone == "WideResNet50" & vanilla != True:
-        raise Exception('There has been an error in the system')
+    if backbone == "WideResNet50" and vanilla != True:
+        raise Exception('Please check the Vanilla and Backbone values. You can use Vanilla == True just with WideResNet50 architecture.')
 
     results = {}  # key = class, Value = [image-level ROC AUC, pixel-level ROC AUC]
     if vanilla:
