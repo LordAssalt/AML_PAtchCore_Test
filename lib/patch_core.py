@@ -33,29 +33,25 @@ class PatchCore(torch.nn.Module):
         # Setup backbone net
         print(f"Vanilla Mode: {vanilla}")
         print(f"Net Used: {backbone}")
+
         if vanilla==True:
             self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
-            self.model.eval()
+            self.model.layer2[-1].register_forward_hook(hook)  # Register hooks
+            self.model.layer3[-1].register_forward_hook(hook)  # Register hooks
         else:
             self.model, _ = clip.load(backbone, device="cpu")
-            self.model.eval()
-
-        # Disable gradient computation
-        for param in self.model.parameters(): 
-            param.requires_grad = False
-
-
-        # Register hooks
-        if vanilla:
-            self.model.layer2[-1].register_forward_hook(hook)
-            self.model.layer3[-1].register_forward_hook(hook)
-        else:
             if "ViT" in backbone:
                 NotImplementedError()
                 # Non ci sono layer
             else:
-                self.model.visual.layer2[-1].register_forward_hook(hook)
-                self.model.visual.layer3[-1].register_forward_hook(hook)
+                self.model.visual.layer2[-1].register_forward_hook(hook)  # Register hooks
+                self.model.visual.layer3[-1].register_forward_hook(hook)  # Register hooks
+
+        self.model.eval()
+        # Disable gradient computation
+        for param in self.model.parameters(): 
+            param.requires_grad = False
+
 
         # Parameters
         self.memory_bank = []
@@ -76,6 +72,7 @@ class PatchCore(torch.nn.Module):
             Return:
                 self.feature filled with extracted feature maps
         """
+
         self.features = []
         if self.vanilla:
             _ = self.model(sample)
