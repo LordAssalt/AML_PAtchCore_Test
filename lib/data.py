@@ -87,14 +87,7 @@ class MVTecTrainDataset(ImageFolder):
                 transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),  # Normalize the image
             ])
         else:
-            transform = transforms.Compose([
-                transforms.Resize(resize, interpolation=transforms.InterpolationMode.BICUBIC),
-                transforms.CenterCrop(size),
-                _convert_image_to_rgb,
-                transforms.ToTensor(),
-                transforms.Normalize((0.481, 0.457, 0.408), (0.268, 0.261, 0.275))])
-
-            #_,transform = clip.load(backbone)
+            _,transform = clip.load(backbone)
 
         super().__init__(
                 root=DATASETS_PATH / cls / "train",
@@ -123,12 +116,7 @@ class MVTecTestDataset(ImageFolder):
                 transforms.ToTensor(),  # Transform the mask into a tensor
             ])
         else:
-            transform  = transforms.Compose([
-                transforms.Resize(resize, interpolation=transforms.InterpolationMode.BICUBIC),
-                transforms.CenterCrop(size),
-                _convert_image_to_rgb,
-                transforms.ToTensor(),
-                transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))])
+            _, transform = clip.load(backbone)
 
             target_transform = transforms.Compose([
                 transforms.Resize(resize, interpolation=transforms.InterpolationMode.NEAREST),
