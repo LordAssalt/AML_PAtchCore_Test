@@ -25,7 +25,7 @@ class PatchCore(torch.nn.Module):
 
 
         super(PatchCore, self).__init__()
-        
+
         # Define hooks to extract feature maps
         def hook(module, input, output) -> None:
             """This hook saves the extracted feature map on self.featured."""
@@ -73,7 +73,7 @@ class PatchCore(torch.nn.Module):
             Return:
                 self.feature filled with extracted feature maps
         """
-        
+
 
         self.features = []
         if self.vanilla:
@@ -90,22 +90,22 @@ class PatchCore(torch.nn.Module):
             Training phase
             Creates memory bank from train dataset and apply greedy coreset subsampling.
         """
-        
+
         for sample, _ in tqdm(train_dataloader):
             feature_maps = self(sample)  # Extract feature maps
 
             # Create aggregation function of feature vectors in the neighbourhood
             self.avg = torch.nn.AvgPool2d(3, stride=1)
             fmap_size = feature_maps[0].shape[-2]  # Feature map sizes h, w
-            self.resize = torch.nn.AdaptiveAvgPool2d(fmap_size) 
-            
+            self.resize = torch.nn.AdaptiveAvgPool2d(fmap_size)
+
             # Create patch
             resized_maps = [self.resize(self.avg(fmap)) for fmap in feature_maps]
             patch = torch.cat(resized_maps, 1)          # Merge the resized feature maps
             patch = patch.reshape(patch.shape[1], -1).T # Craete a column tensor
-            
+
             self.memory_bank.append(patch) # Fill memory bank
-        
+
         self.memory_bank = torch.cat(self.memory_bank, 0) # VStack the patches
 
         # Coreset subsampling
@@ -126,7 +126,7 @@ class PatchCore(torch.nn.Module):
             - image-level ROC-AUC score
             - pixel-level ROC-AUC score
         """
-        
+
 
         image_preds = []
         image_labels = []
@@ -143,12 +143,14 @@ class PatchCore(torch.nn.Module):
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
-        
+
         image_labels = np.stack(image_labels)
         image_preds = np.stack(image_preds)
 
         # Compute ROC AUC for prediction scores
         image_level_rocauc = roc_auc_score(image_labels, image_preds)
+        print(f"pixel_labels_size={pixel_labels.size()}")
+        print(f"pixel_preds_size={pixel_preds.size()}")
         pixel_level_rocauc = roc_auc_score(pixel_labels, pixel_preds)
 
         return image_level_rocauc, pixel_level_rocauc
@@ -214,4 +216,3 @@ class PatchCore(torch.nn.Module):
         segm_map = gaussian_blur(segm_map)  # Gaussian blur of kernel width = 4
 
         return s, segm_map
-

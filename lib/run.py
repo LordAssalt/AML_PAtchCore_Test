@@ -6,7 +6,7 @@ ALL_CLASSES = mvtec_classes()
 
 
 def run_model(
-    classes: list = ALL_CLASSES, 
+    classes: list = ALL_CLASSES,
     f_coreset: float = 0.1,
     vanilla: bool = True,
     backbone: str = 'WideResNet50'):
@@ -23,7 +23,7 @@ def run_model(
         size = 288
     elif backbone == 'ResNet50-16':  # RN50x16
         size = 384
-	elif backbone == 'ResNet101':  # RN50x16
+    elif backbone == 'ResNet101':  # RN50x16
         size = 224
     else:  # ViT-B/32
         size = 224
@@ -44,7 +44,7 @@ def run_model(
         results[cls] = [float(image_rocauc), float(pixel_rocauc)]
         print(f'- image-level ROC AUC = {image_rocauc:.2f}')
         print(f'- pixel-level ROC AUC = {pixel_rocauc:.2f}\n')
-    
+
     # Save global results and statistics
     image_results = [v[0] for k, v in results.items()]
     average_image_rocauc = sum(image_results) / len(image_results)
