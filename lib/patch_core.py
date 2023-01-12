@@ -136,10 +136,14 @@ class PatchCore(torch.nn.Module):
         transform = T.ToPILImage()
 
         for sample, mask, label in tqdm(test_dataloader):
+
             image_labels.append(label)
             pixel_labels.extend(mask.flatten().numpy())
 
             score, segm_map = self.predict(sample)  # Anomaly Detection
+
+            print(f"seg_map dim ={segm_map.size()}")
+            print(f"mask dim ={mask.size()}")
 
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
@@ -149,8 +153,6 @@ class PatchCore(torch.nn.Module):
 
         # Compute ROC AUC for prediction scores
         image_level_rocauc = roc_auc_score(image_labels, image_preds)
-        print(f"pixel_labels_size={len(pixel_labels)}")
-        print(f"pixel_preds_size={len(pixel_preds)}")
         pixel_level_rocauc = roc_auc_score(pixel_labels, pixel_preds)
 
         return image_level_rocauc, pixel_level_rocauc
