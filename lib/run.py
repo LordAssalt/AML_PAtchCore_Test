@@ -18,7 +18,7 @@ def run_model(
     if vanilla:
         size = DEFAULT_SIZE
     elif backbone == 'ResNet50':  # RN50x64
-        size = 448
+        size = 224
     else:  # ViT-B/32
         size = 224
 
