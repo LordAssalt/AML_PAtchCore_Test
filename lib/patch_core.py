@@ -149,8 +149,8 @@ class PatchCore(torch.nn.Module):
 
         # Compute ROC AUC for prediction scores
         image_level_rocauc = roc_auc_score(image_labels, image_preds)
-        print(f"pixel_labels_size={pixel_labels.size()}")
-        print(f"pixel_preds_size={pixel_preds.size()}")
+        print(f"pixel_labels_size={len(pixel_labels)}")
+        print(f"pixel_preds_size={len(pixel_preds)}")
         pixel_level_rocauc = roc_auc_score(pixel_labels, pixel_preds)
 
         return image_level_rocauc, pixel_level_rocauc
