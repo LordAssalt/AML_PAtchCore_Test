@@ -18,6 +18,7 @@ class PatchCore(torch.nn.Module):
             k_nearest: int = 3,        # k parameter for K-NN search
             vanilla: bool = True,
             backbone: str = 'wide_resnet50_2',
+            image_size: int =224
     ):
         assert f_coreset > 0
         assert eps_coreset > 0
@@ -61,7 +62,7 @@ class PatchCore(torch.nn.Module):
         self.k_nearest = k_nearest
         self.vanilla = vanilla
         self.backbone = backbone
-        self.image_size = 224
+        self.image_size = image_size
 
 
     def forward(self, sample: tensor):
