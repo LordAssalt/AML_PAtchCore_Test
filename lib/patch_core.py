@@ -40,8 +40,8 @@ class PatchCore(torch.nn.Module):
             self.model.layer2[-1].register_forward_hook(hook)  # Register hooks
             self.model.layer3[-1].register_forward_hook(hook)  # Register hooks
         else:
-            self.model, _ = clip.load(backbone, device=cpu)
-            if ViT in backbone:
+            self.model, _ = clip.load(backbone, device="cpu")
+            if "ViT" in backbone:
                 NotImplementedError()
                 # Non ci sono layer
             else:
@@ -135,7 +135,7 @@ class PatchCore(torch.nn.Module):
 
         transform = T.ToPILImage()
 
-        for sample, mask, label in tqdm(test_dataloader)
+        for sample, mask, label in tqdm(test_dataloader):
             image_labels.append(label)
             pixel_labels.extend(mask.flatten().numpy())
 
