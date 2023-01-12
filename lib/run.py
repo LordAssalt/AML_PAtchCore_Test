@@ -17,7 +17,13 @@ def run_model(
     results = {}  # key = class, Value = [image-level ROC AUC, pixel-level ROC AUC]
     if vanilla:
         size = DEFAULT_SIZE
-    elif backbone == 'ResNet50':  # RN50x64
+    elif backbone == 'ResNet50':  # RN50
+        size = 224
+    elif backbone == 'ResNet50-4':  # RN50x4
+        size = 288
+    elif backbone == 'ResNet50-16':  # RN50x16
+        size = 384
+	elif backbone == 'ResNet101':  # RN50x16
         size = 224
     else:  # ViT-B/32
         size = 224
