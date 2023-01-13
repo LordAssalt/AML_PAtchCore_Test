@@ -30,7 +30,7 @@ def run_model(
 
     print(f'Running PatchCore...')
     for cls in classes:
-        train_dl, test_dl = MVTecDataset(cls, size=size).get_dataloaders()
+        train_dl, test_dl = MVTecDataset(cls, size=size, vanilla=vanilla, backbone=backnones[backbone]).get_dataloaders()
         patch_core = PatchCore(f_coreset, vanilla=vanilla, backbone=backnones[backbone], image_size=size)
 
         print(train_dl)
