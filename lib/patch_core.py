@@ -85,14 +85,16 @@ class PatchCore(torch.nn.Module):
         return self.features
 
 
-    def fit(self, train_dataloader :DataLoader) -> None:
+    def fit(self, train_dataloader :DataLoader, scale :int=1) -> None:
 
         """
             Training phase
             Creates memory bank from train dataset and apply greedy coreset subsampling.
         """
+        tot=int(len(train_dataloader)/scale))
+        counter=0
 
-        for sample, _ in tqdm(train_dataloader):
+        for sample, _ in tqdm(train_dataloader, total=tot):
             feature_maps = self(sample)  # Extract feature maps
 
             # Create aggregation function of feature vectors in the neighbourhood
@@ -106,6 +108,9 @@ class PatchCore(torch.nn.Module):
             patch = patch.reshape(patch.shape[1], -1).T # Craete a column tensor
 
             self.memory_bank.append(patch) # Fill memory bank
+            counter+=1
+            if counter > tot:
+                break
 
         self.memory_bank = torch.cat(self.memory_bank, 0) # VStack the patches
 

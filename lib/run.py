@@ -1,6 +1,6 @@
 from .data import MVTecDataset, mvtec_classes, DEFAULT_SIZE
 from .patch_core import PatchCore
-from .utils import backnones
+from .utils import backnones, dataset_scale_factor
 
 ALL_CLASSES = mvtec_classes()
 
@@ -37,7 +37,7 @@ def run_model(
 
         print(f'\nClass {cls}:')
         print(f'Training...')
-        patch_core.fit(train_dl)
+        patch_core.fit(train_dl, scale=dataset_scale_factor[backbone])
 
         print(f'Testing...')
         image_rocauc, pixel_rocauc = patch_core.evaluate(test_dl)
