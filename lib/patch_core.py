@@ -91,7 +91,7 @@ class PatchCore(torch.nn.Module):
             Training phase
             Creates memory bank from train dataset and apply greedy coreset subsampling.
         """
-        tot=int(len(train_dataloader)/scale))
+        tot=int(len(train_dataloader)/scale)
         counter=0
 
         for sample, _ in tqdm(train_dataloader, total=tot):
