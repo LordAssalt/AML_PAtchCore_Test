@@ -13,6 +13,7 @@ backnones = {
     'ResNet50':'RN50',
     'ResNet50-4':'RN50x4',
     'ResNet50-16':'RN50x16',
+    'ResNet50-64':'RN50x64',
     'Vit32':'ViT-B/32'
 }
 
@@ -20,8 +21,9 @@ dataset_scale_factor = {
     'WideResNet50':1,
     'ResNet101':2,
     'ResNet50':1,
-    'ResNet50-4':4,
-    'ResNet50-16':5,
+    'ResNet50-4':1,
+    'ResNet50-16':2,
+    'ResNet50-64':2,
 }
 
 def get_coreset(

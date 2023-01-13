@@ -23,6 +23,8 @@ def run_model(
         size = 288
     elif backbone == 'ResNet50-16':  # RN50x16
         size = 384
+    elif backbone == 'ResNet50-16':  # RN50x16
+        size = 448
     elif backbone == 'ResNet101':  # RN50x16
         size = 224
     else:  # ViT-B/32
