@@ -148,9 +148,6 @@ class PatchCore(torch.nn.Module):
 
             score, segm_map = self.predict(sample)  # Anomaly Detection
 
-            print(f"seg_map dim ={segm_map.size()}")
-            print(f"mask dim ={mask.size()}")
-
             image_preds.append(score.numpy())
             pixel_preds.extend(segm_map.flatten().numpy())
 
