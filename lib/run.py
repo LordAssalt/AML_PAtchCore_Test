@@ -35,8 +35,6 @@ def run_model(
         train_dl, test_dl = MVTecDataset(cls, size=size, vanilla=vanilla, backbone=backnones[backbone]).get_dataloaders()
         patch_core = PatchCore(f_coreset, vanilla=vanilla, backbone=backnones[backbone], image_size=size)
 
-        print(train_dl)
-
         print(f'\nClass {cls}:')
         print(f'Training...')
         patch_core.fit(train_dl, scale=dataset_scale_factor[backbone])
