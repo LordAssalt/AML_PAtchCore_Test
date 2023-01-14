@@ -14,7 +14,6 @@ backnones = {
     'ResNet50-4':'RN50x4',
     'ResNet50-16':'RN50x16',
     'ResNet50-64':'RN50x64',
-    'Vit32':'ViT-B/32'
 }
 
 dataset_scale_factor = {
