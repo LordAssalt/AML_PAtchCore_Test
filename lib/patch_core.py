@@ -2,10 +2,12 @@ import torch
 import random
 import clip  #needed for CLIP
 import numpy as np
+import torchvision
 import torchvision.transforms as T
 from tqdm import tqdm
 from torch import tensor
 from torch.utils.data import DataLoader
+from torch.nn import functional as F
 from sklearn.metrics import roc_auc_score
 from .utils import gaussian_blur, get_coreset
 from PIL import Image  #needed for CLIP

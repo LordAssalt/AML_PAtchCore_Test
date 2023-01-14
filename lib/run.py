@@ -44,8 +44,8 @@ def run_model(
 
         print(f'Results:')
         results[cls] = [float(image_rocauc), float(pixel_rocauc)]
-        print(f'- image-level ROC AUC = {image_rocauc:.2f}')
-        print(f'- pixel-level ROC AUC = {pixel_rocauc:.2f}\n')
+        print(f'- image-level ROC AUC = {image_rocauc:.3f}')
+        print(f'- pixel-level ROC AUC = {pixel_rocauc:.3f}\n')
 
     # Save global results and statistics
     image_results = [v[0] for k, v in results.items()]
@@ -53,8 +53,8 @@ def run_model(
     pixel_resuts = [v[1] for k, v in results.items()]
     average_pixel_rocauc = sum(pixel_resuts) / len(pixel_resuts)
 
-    print(f'- Average image-level ROC AUC = {average_image_rocauc:.2f}\n')
-    print(f'- Average pixel-level ROC AUC = {average_pixel_rocauc:.2f}\n')
+    print(f'- Average image-level ROC AUC = {average_image_rocauc:.3f}\n')
+    print(f'- Average pixel-level ROC AUC = {average_pixel_rocauc:.3f}\n')
 
 
 
