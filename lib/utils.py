@@ -18,7 +18,7 @@ backnones = {
 
 dataset_scale_factor = {
     'WideResNet50':1,
-    'ResNet101':2,
+    'ResNet101':1,
     'ResNet50':1,
     'ResNet50-4':1,
     'ResNet50-16':2,
