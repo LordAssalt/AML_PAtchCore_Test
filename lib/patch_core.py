@@ -39,7 +39,7 @@ class PatchCore(torch.nn.Module):
         print(f"Net Used {backbone}")
 
         if vanilla==True:
-            self.model = torch.hub.load('pytorch/vision', 'wide_resnet50_2', pretrained=True)
+            self.model = torch.hub.load('pytorch/vision:v0.13.0', 'wide_resnet50_2', pretrained=True)
             self.model.layer2[-1].register_forward_hook(hook)  # Register hooks
             self.model.layer3[-1].register_forward_hook(hook)  # Register hooks
         else:
