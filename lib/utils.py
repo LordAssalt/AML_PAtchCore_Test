@@ -13,7 +13,6 @@ backnones = {
     'ResNet50':'RN50',
     'ResNet50-4':'RN50x4',
     'ResNet50-16':'RN50x16',
-    'ResNet50-64':'RN50x64',
 }
 
 dataset_scale_factor = {
@@ -21,8 +20,12 @@ dataset_scale_factor = {
     'ResNet101':1,
     'ResNet50':1,
     'ResNet50-4':2,
+<<<<<<< Updated upstream
     'ResNet50-16':4,
     'ResNet50-64':6,
+=======
+    'ResNet50-16':3,
+>>>>>>> Stashed changes
 }
 
 def get_coreset(
