@@ -21,8 +21,8 @@ dataset_scale_factor = {
     'ResNet101':1,
     'ResNet50':1,
     'ResNet50-4':2,
-    'ResNet50-16':3,
-    'ResNet50-64':5,
+    'ResNet50-16':4,
+    'ResNet50-64':6,
 }
 
 def get_coreset(
